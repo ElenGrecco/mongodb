@@ -95,6 +95,52 @@ const buscarCliente = async (nome) => {
 
 //===========================================================================================================
 
+// CRUD Update - Função para alterar os dados de um cliente
+// ATENÇÃO !!! Obrigatóriamente o update precisa ser feito
+// com base no ID do cliente
+const atualizarCliente = async (id, nomeCli, foneCli, cpfCli) => {
+    try {
+        const cliente = await clienteModel.findByIdAndUpdate(
+            id,
+            {
+                nomeCliente: nomeCli,
+                foneCliente: foneCli,
+                cpf: cpfCli
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        )
+        //validação (retorno do banco)
+        if (!cliente) {
+            console.log("Cliente não encontrado")
+        } else {
+            console.log("Dados do cliente alterados com sucesso")
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//CRUD Delete - Função para excluir um cliente
+//Atenção!!! Obrigatóriamente a exclusão é feita pelo ID
+const deletarCliente = async (id) => {
+    try {
+        //a linha abaixo exclui o cliente do banco de dados
+        const cliente = await clienteModel.findByIdAndUpdate(id)
+        //validação
+        if (!cliente) {
+            console.log("Cliente não encontrado")
+        } else {
+            console.log("Cliente Deletado")
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 
 
 //execução da aplicação
@@ -109,11 +155,19 @@ const app = async () => {
     //await criarCliente("Jose Coutinho", "91111-1113", "12345678905")
 
     //CRUD - Read (Exemplo 1- listar todos os clientes)
-    //await listarClientes()
+    await listarClientes()
 
     //CRUD - Read (Exemplo 2- buscar clientes)
-    await buscarCliente("Breno H")
+    //await buscarCliente("Breno Henrique")
+    // CRUD - Update
+    //await atualizarCliente('67b904ff8559c8f2934bcf57', 'Breno Henrique Junior', '(11)99999-8888', '000.111.222-33')
+    //await buscarCliente("Breno Henrique")
+
+    //CRUD Delete
+    await deletarCliente('67b904ff8559c8f2934bcf55')
+    await listarClientes()
     await desconectar()
+        
 
 }
 
